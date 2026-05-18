@@ -1,0 +1,243 @@
+/* Resetting default margins and padding for html and body */
+html, body {
+    margin: 0;
+    padding: 0;
+    /* Important: Do NOT set height: 100% here on html/body if using flexbox and min-height on body,
+       as it can sometimes interfere with overflow behavior when content slightly exceeds. */
+}
+
+body {
+    background-color: #222; /* Dark background */
+    color: #eee;          /* Light text */
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically in the available space */
+    align-items: center;     /* Center content horizontally */
+    min-height: 100vh;       /* Body takes at least 100% of viewport height */
+    overflow: hidden;        /* Crucial: Prevent scrollbars! Rely on content scaling. */
+    box-sizing: border-box;  /* Ensure padding is included in element's total size */
+    padding: 1.5vh 1vw;      /* Add some responsive padding around the entire content block */
+}
+
+h1 {
+    margin: 0 0 1.5vh 0; /* Only bottom margin, top is handled by body padding */
+    color: #00ff00; /* Neon green for title */
+    font-size: 2.5em; /* Keep font size consistent */
+    flex-shrink: 0;  /* Prevent text from shrinking */
+    text-align: center; /* Centrar el texto h1 */
+}
+
+.difficulty-selection {
+    margin-bottom: 2vh; /* Margin below the buttons to separate from canvas */
+    flex-shrink: 0;     /* Prevent buttons from shrinking */
+    display: flex; /* Make buttons a flex container too for better internal spacing */
+    gap: 1vw; /* Space between buttons */
+}
+
+.difficulty-selection button {
+    background-color: #333;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    padding: 0.8vh 1.5vw; /* Responsive padding for buttons */
+    /* margin: 0 0.5vw; Removed in favor of gap on parent flex container */
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 5px;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    white-space: nowrap; /* Prevent button text from wrapping */
+}
+
+.difficulty-selection button:hover {
+    background-color: #00ff00;
+    color: #000;
+}
+
+.difficulty-selection button.active {
+    background-color: #00ff00;
+    color: #000;
+    font-weight: bold;
+    border-color: #fff;
+}
+
+canvas {
+    background-color: #000; /* Black background for canvas */
+    border: 2px solid #00ff00; /* Neon green border */
+    display: block;          /* Remove extra space below canvas */
+    
+    /* Responsive sizing for the canvas */
+    /* These properties will make the canvas scale down to fit the available space
+       while maintaining its 4:3 aspect ratio (800x600). */
+    max-width: calc(100vw - (2 * 1vw)); /* 100% viewport width minus body's horizontal padding */
+    /* Calculate max-height: 100vh - (body's top/bottom padding) - (h1's bottom margin) - (difficulty-selection's bottom margin) - (canvas's top/bottom border thickness) */
+    max-height: calc(100vh - (2 * 1.5vh) - 1.5vh - 2vh - 4px); /* (100vh - 3vh - 1.5vh - 2vh - 4px) = 100vh - 6.5vh - 4px */
+    width: auto;  /* Allow width to be determined by aspect ratio and max-height */
+    height: auto; /* Allow height to be determined by aspect ratio and max-width */
+    aspect-ratio: 4 / 3; /* Explicitly set aspect ratio (width / height) */
+    object-fit: contain; /* Ensures content is scaled down to fit while maintaining aspect ratio */
+    flex-grow: 1;         /* Allows the canvas to consume available vertical space */
+    flex-shrink: 1;       /* Allows the canvas to shrink if necessary */
+    min-width: 0;         /* Override default min-width behaviour in flex containers */
+    min-height: 0;        /* Override default min-height behaviour in flex containers */
+}
+
+.game-mode-selection {
+    margin-bottom: 2vh; /* Margen para separarlo de la dificultad y el título */
+    flex-shrink: 0;
+    display: flex;
+    gap: 1vw; /* Espacio entre botones */
+}
+
+/* Reutilizamos los estilos de los botones de dificultad para los botones de modo */
+.game-mode-selection button {
+    background-color: #333;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    padding: 0.8vh 1.5vw;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 5px;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+}
+
+.game-mode-selection button:hover {
+    background-color: #00ff00;
+    color: #000;
+}
+
+.game-mode-selection button.active {
+    background-color: #00ff00;
+    color: #000;
+    font-weight: bold;
+    border-color: #fff;
+}
+
+.game-overlay {
+    position: absolute; /* Para que flote sobre el canvas y el resto del contenido */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo semi-transparente oscuro */
+    color: #eee;
+    display: flex; /* Para centrar el contenido del overlay */
+    justify-content: center;
+    align-items: center;
+    z-index: 10; /* Asegura que esté por encima de otros elementos */
+    opacity: 0; /* Oculto por defecto, solo visible si tiene la clase .active */
+    pointer-events: none; /* Permite clics a través del overlay cuando está oculto */
+    transition: opacity 0.3s ease-in-out; /* Transición suave al aparecer/desaparecer */
+}
+
+.game-overlay.active {
+    opacity: 1; /* Hace el overlay visible */
+    pointer-events: auto; /* Permite interacciones cuando está activo */
+}
+
+.overlay-content {
+    text-align: center;
+    padding: 30px;
+    background-color: #1a1a1a; /* Un fondo ligeramente más claro para el contenido */
+    border: 2px solid #00ff00; /* Borde neón */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); /* Sombra brillante */
+    max-width: 80%; /* Para que no ocupe todo el ancho en pantallas grandes */
+    margin: 20px; /* Margen para pantallas muy pequeñas */
+    flex-shrink: 0;
+}
+
+.overlay-content h2 {
+    color: #00ff00;
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+.overlay-content p {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.overlay-content button {
+    background-color: #00ff00;
+    color: #000;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.3em;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.overlay-content button:hover {
+    background-color: #fff;
+    color: #00ff00;
+    transform: translateY(-2px); /* Pequeño efecto al pasar el ratón */
+}
+
+.controls-info {
+    font-size: 0.9em;
+    color: #aaa;
+    margin-top: 30px;
+}
+
+/* ... existing code ... */
+
+.volume-control {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centrar el control de volumen */
+    gap: 10px;
+}
+
+.volume-control label {
+    font-size: 1.1em;
+    color: #00ff00; /* Color neón para la etiqueta */
+    white-space: nowrap; /* Evita que el texto de la etiqueta se rompa */
+}
+
+/* Estilos para el input range (el deslizador) */
+.volume-control input[type="range"] {
+    -webkit-appearance: none; /* Ocultar el estilo predeterminado del navegador */
+    appearance: none;
+    width: 150px; /* Ancho fijo para el deslizador */
+    height: 8px; /* Altura de la pista */
+    background: #333; /* Color de fondo de la pista */
+    border-radius: 4px;
+    outline: none; /* Eliminar el contorno al enfocar */
+    transition: background 0.2s;
+    flex-grow: 1; /* Permite que el deslizador ocupe el espacio disponible */
+}
+
+/* Estilos del "thumb" (la bolita o el selector) del deslizador */
+.volume-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px; /* Tamaño del thumb */
+    height: 20px;
+    border-radius: 50%; /* Forma circular */
+    background: #00ff00; /* Color neón */
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.7); /* Sombra brillante */
+    border: 2px solid #fff; /* Borde blanco */
+}
+
+.volume-control input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #00ff00;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.7);
+    border: 2px solid #fff;
+}
+
+/* Estilos del "track" (la pista) del deslizador para Firefox */
+.volume-control input[type="range"]::-moz-range-track {
+    background: #333;
+    border-radius: 4px;
+}
