@@ -24,7 +24,7 @@ backgroundMusic.volume = 0.3; // Volumen inicial por defecto, será sobrescrito 
 
 // Constantes para el feedback visual de la paleta
 const PADDLE_HIT_FLASH_DURATION = 10; // Duración del flash en frames (aprox 0.16 segundos a 60fps)
-const PADDLE_FLASH_COLOR = '#FFD700'; // Color de flash (ej. oro)
+const PADDLE_FLASH_COLOR = '#009dffd0'; // Color de flash (ej. oro)
 
 // Constantes para el feedback visual de la puntuación
 const SCORE_FLASH_DURATION = 30; // Duración del flash de puntuación en frames (aprox 0.5 segundos)
@@ -36,7 +36,7 @@ const BALL_TRAIL_LENGTH = 10; // Número de posiciones anteriores a dibujar en e
 
 // Constantes para el flash de fondo del canvas
 const CANVAS_SCORE_FLASH_DURATION = 15; // Duración del flash en frames
-const CANVAS_SCORE_FLASH_COLOR = '#00FF00'; // Color del flash (verde neón brillante)
+const CANVAS_SCORE_FLASH_COLOR = '#00ffe1a6'; // Color del flash (verde neón brillante)
 
 
 // === Partículas ===
@@ -521,16 +521,16 @@ function draw() {
     ctx.setLineDash([10, 10]); // Patrón de 10px de línea, 10px de espacio
     ctx.moveTo(canvasWidth / 2, 0); // Empieza en el centro superior
     ctx.lineTo(canvasWidth / 2, canvasHeight); // Termina en el centro inferior
-    ctx.strokeStyle = '#eee'; // Color de la línea (gris claro)
+    ctx.strokeStyle = '#b3b3b3'; // Color de la línea (gris claro)
     ctx.lineWidth = 2; // Grosor de la línea
     ctx.stroke();
     ctx.setLineDash([]); // Restablecer el patrón de línea a sólido para otros dibujos
 
     // Dibujar paletas (con flash effect)
     drawRect(playerPaddle.x, playerPaddle.y, playerPaddle.width, playerPaddle.height,
-             playerPaddle.flashTimer > 0 ? PADDLE_FLASH_COLOR : '#00ff00');
+             playerPaddle.flashTimer > 0 ? PADDLE_FLASH_COLOR : '#00fbff');
     drawRect(computerPaddle.x, computerPaddle.y, computerPaddle.width, computerPaddle.height,
-             computerPaddle.flashTimer > 0 ? PADDLE_FLASH_COLOR : '#00ff00');
+             computerPaddle.flashTimer > 0 ? PADDLE_FLASH_COLOR : '#00b3ff');
 
     // Dibujar el rastro de la pelota
     for (let i = 0; i < ball.trail.length; i++) {
@@ -544,7 +544,7 @@ function draw() {
     }
 
     // Dibujar pelota (la pelota principal, encima del rastro)
-    drawCircle(ball.x, ball.y, ball.radius, '#00ff00'); // Verde
+    drawCircle(ball.x, ball.y, ball.radius, '#00ffbf'); // Verde
 
     // === Dibujar Partículas ===
     for (const particle of particles) {
@@ -575,7 +575,7 @@ function draw() {
 
     // === Dibujar la cuenta regresiva ===
     if (gameState === 'countdown') {
-        ctx.fillStyle = '#FFFFFF';
+        ctx.fillStyle = '#00a6ff';
         ctx.font = '100px Arial';
         ctx.textAlign = 'center';
         ctx.fillText(countdownValue, canvasWidth / 2, canvasHeight / 2 + 30); // Centrado verticalmente
